@@ -1,12 +1,13 @@
 import cv2 as cv
-from models import model
+import numpy as np
+import torch
 from PIL import Image
 from torchvision import transforms
-import torch
 from tqdm import tqdm
-import numpy as np
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # sets device for model and PyTorch tensors
+import time
+from models import model
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # sets device for model and PyTorch tensors
 
 # Data augmentation and normalization for training
 # Just normalization for validation
@@ -28,21 +29,18 @@ model = checkpoint['model'].to(device)
 model.eval()
 transformer = data_transforms['val']
 
+
 def get_image(img, transformer):
     img = img[..., ::-1]  # RGB
     img = Image.fromarray(img, 'RGB')  # RGB
     img = transformer(img)
     return img.to(device)
 
-def gen_feature(path):
-    print('gen features {}...'.format(path))
-    # Preprocess the total files count
-    files = []
-    for filepath in walkdir(path, '.jpg'):
-        files.append(filepath)
-    file_count = len(files)
 
+def gen_feature(frame_list):
+    file_count = len(frame_list)
     batch_size = 128
+    ret_mat = np.empty((file_count, 512), np.float32)
 
     with torch.no_grad():
         for start_idx in tqdm(range(0, file_count, batch_size)):
@@ -52,19 +50,12 @@ def gen_feature(path):
             imgs = torch.zeros([length, 3, 112, 112], dtype=torch.float)
             for idx in range(0, length):
                 i = start_idx + idx
-                filepath = files[i]
-                imgs[idx] = get_image(cv.imread(filepath, True), transformer)
+                imgs[idx] = get_image(frame_list[i], transformer)
 
             features = model(imgs.to(device)).cpu().numpy()
-            for idx in range(0, length):
-                i = start_idx + idx
-                filepath = files[i]
-                tarfile = filepath + '_0.bin'
-                feature = features[idx]
-                write_feature(tarfile, feature / np.linalg.norm(feature))
+            ret_mat[start_idx:start_idx + length] = features
 
-def process(frame):
-    pass
+    return ret_mat
 
 
 if __name__ == "__main__":
@@ -73,13 +64,25 @@ if __name__ == "__main__":
 
     cap = cv.VideoCapture(video)
 
+    frame_list = []
     frame_idx = 0
 
+    print('collecting frames...')
     while cap.isOpened():
         success, frame = cap.read()
         if not success:
             break
+        frame_list.append(frame)
+    frame_count = len(frame_list)
+    print('frame_count: ' + str(frame_count))
 
-        process(frame)
+    print('generating features...')
+    start = time.time()
+    mat = gen_feature(frame_list)
+    np.save('mat.npz', mat)
+    end = time.time()
+    elapsed = end - start
+    elapsed_per_frame = elapsed / frame_count
+    print('elapsed: ' + str(elapsed))
+    print('elapsed_per_frame: ' + str(elapsed_per_frame))
 
-        frame_idx = frame_idx + 1

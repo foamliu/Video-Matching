@@ -5,10 +5,9 @@ import torch.nn.functional as F
 import torch.utils.model_zoo as model_zoo
 from torch import nn
 from torch.nn import Parameter
-from torchsummary import summary
 
-from config import device, num_classes
-from utils import parse_args
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # sets device for model and PyTorch tensors
+num_classes = 9935
 
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152']
@@ -292,9 +291,3 @@ class ArcMarginModel(nn.Module):
         output = (one_hot * phi) + ((1.0 - one_hot) * cosine)
         output *= self.s
         return output
-
-
-if __name__ == "__main__":
-    args = parse_args()
-    model = resnet50(args).to(device)
-    summary(model, (3, 224, 224))

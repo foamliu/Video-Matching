@@ -54,7 +54,11 @@ def gen_feature(frame_list):
                 imgs[idx] = get_image(frame_list[i], transformer)
 
             features = model(imgs.to(device)).cpu().numpy()
-            ret_mat[start_idx:start_idx + length] = features
+            for idx in range(0, length):
+                feature = features[idx]
+                feature = feature / np.linalg.norm(feature)
+                i = start_idx + idx
+                ret_mat[i] = feature
 
     return ret_mat
 

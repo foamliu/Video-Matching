@@ -81,7 +81,7 @@ if __name__ == "__main__":
     print('generating features...')
     start = time.time()
     mat = gen_feature(frame_list)
-    np.save('video.npz', mat)
+    np.save('video', mat)
     end = time.time()
     elapsed = end - start
     elapsed_per_frame = elapsed / frame_count
@@ -92,4 +92,4 @@ if __name__ == "__main__":
     img = cv.resize(img, (im_size, im_size))
     img_list = [img]
     mat = gen_feature(frame_list)
-    np.save('image.npz', mat[0])
+    np.save('image', mat[0])

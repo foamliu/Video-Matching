@@ -65,7 +65,7 @@ def gen_feature(frame_list):
 
 if __name__ == "__main__":
     video = 'material/FM190311-10.mp4'
-    image = 'material/9707366.jpg'
+    image = 'material/9707366-1.jpg'
 
     cap = cv.VideoCapture(video)
 
@@ -97,3 +97,4 @@ if __name__ == "__main__":
     img_list = [img]
     mat = gen_feature(img_list)
     np.save('image', mat[0])
+

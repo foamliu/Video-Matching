@@ -7,8 +7,6 @@ from PIL import Image
 from torchvision import transforms
 from tqdm import tqdm
 
-from models import model
-
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # sets device for model and PyTorch tensors
 
 # Data augmentation and normalization for training

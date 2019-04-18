@@ -91,5 +91,5 @@ if __name__ == "__main__":
     img = cv.imread(image)
     img = cv.resize(img, (im_size, im_size))
     img_list = [img]
-    mat = gen_feature(frame_list)
+    mat = gen_feature(img_list)
     np.save('image', mat[0])

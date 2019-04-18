@@ -7,6 +7,7 @@ from PIL import Image
 from torchvision import transforms
 from tqdm import tqdm
 
+im_size = 112
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # sets device for model and PyTorch tensors
 
 # Data augmentation and normalization for training
@@ -72,6 +73,7 @@ if __name__ == "__main__":
         success, frame = cap.read()
         if not success:
             break
+        frame = cv.resize(frame, (im_size, im_size))
         frame_list.append(frame)
     frame_count = len(frame_list)
     print('frame_count: ' + str(frame_count))

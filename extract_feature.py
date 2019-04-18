@@ -1,10 +1,12 @@
+import time
+
 import cv2 as cv
 import numpy as np
 import torch
 from PIL import Image
 from torchvision import transforms
 from tqdm import tqdm
-import time
+
 from models import model
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # sets device for model and PyTorch tensors
@@ -85,4 +87,3 @@ if __name__ == "__main__":
     elapsed_per_frame = elapsed / frame_count
     print('elapsed: ' + str(elapsed))
     print('elapsed_per_frame: ' + str(elapsed_per_frame))
-

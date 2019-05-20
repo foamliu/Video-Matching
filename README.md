@@ -23,9 +23,10 @@
 
 ## 阈值
 
+阈值：25.50393648495902
+
 ![image](https://github.com/foamliu/Video-Matching/raw/master/images/theta_dist.png)
 
-阈值精确值为：25.50393648495902
 
 ## 结果
 

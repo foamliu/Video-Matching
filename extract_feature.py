@@ -7,7 +7,8 @@ from PIL import Image
 from torchvision import transforms
 from tqdm import tqdm
 
-im_size = 112
+from config import im_size
+
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # sets device for model and PyTorch tensors
 
 # Data augmentation and normalization for training
@@ -48,7 +49,7 @@ def gen_feature(frame_list):
             end_idx = min(file_count, start_idx + batch_size)
             length = end_idx - start_idx
 
-            imgs = torch.zeros([length, 3, 112, 112], dtype=torch.float)
+            imgs = torch.zeros([length, 3, im_size, im_size], dtype=torch.float)
             for idx in range(0, length):
                 i = start_idx + idx
                 imgs[idx] = get_image(frame_list[i], transformer)
@@ -97,4 +98,3 @@ if __name__ == "__main__":
     img_list = [img]
     mat = gen_feature(img_list)
     np.save('image', mat[0])
-

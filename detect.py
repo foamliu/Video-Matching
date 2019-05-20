@@ -4,7 +4,7 @@ import cv2 as cv
 import matplotlib.pyplot as plt
 import numpy as np
 
-im_size = 112
+im_size = 224
 
 
 def get_frame_list():

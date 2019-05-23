@@ -66,7 +66,7 @@ def gen_feature(frame_list):
 
 if __name__ == "__main__":
     video = 'material/FM190311-10.mp4'
-    image = 'material/9707366-1.jpg'
+    image = 'material/shancun.JPG'
 
     cap = cv.VideoCapture(video)
 

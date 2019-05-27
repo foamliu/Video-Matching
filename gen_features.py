@@ -12,13 +12,7 @@ from tqdm import tqdm
 from config import device
 from config import im_size
 
-
-def get_image(img):
-    img = img[..., ::-1]  # RGB
-    img = Image.fromarray(img, 'RGB')  # RGB
-    img = transformer(img)
-    return img.to(device)
-
+from utils import get_image
 
 if __name__ == "__main__":
     files = [f for f in os.listdir('video') if f.endswith('.mp4')]
@@ -62,15 +56,6 @@ if __name__ == "__main__":
     num_frames = len(frames)
     print('num_frames: ' + str(num_frames))
     assert (i == num_frames)
-
-    data_transforms = {
-        'val': transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        ]),
-    }
-
-    transformer = data_transforms['val']
 
     checkpoint = 'BEST_checkpoint.tar'
     print('loading model: {}...'.format(checkpoint))

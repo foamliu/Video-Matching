@@ -56,7 +56,7 @@ if __name__ == "__main__":
     print('max_index: ' + str(max_index))
     print('max_value: ' + str(max_value))
     print('name: ' + name_list[max_index])
-    print('fps: ' + idx_list[fps_list])
+    print('fps: ' + idx_list[max_index])
     print('idx: ' + idx_list[max_index])
     theta = math.acos(max_value)
     theta = theta * 180 / math.pi

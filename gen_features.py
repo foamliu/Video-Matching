@@ -54,7 +54,7 @@ if __name__ == "__main__":
             frame_info['image_fn'] = image_fn
             frames.append(frame_info)
             frame_idx += 1
-            i += 0
+            i += 1
 
     with open('video_index.json', 'w') as file:
         json.dump(frames, file, ensure_ascii=False, indent=4)

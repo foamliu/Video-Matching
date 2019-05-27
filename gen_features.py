@@ -44,7 +44,7 @@ if __name__ == "__main__":
             success, frame = cap.read()
             if not success:
                 break
-                
+
             frame_info = dict()
             frame_info['name'] = name
             frame_info['idx'] = frame_idx
@@ -52,7 +52,7 @@ if __name__ == "__main__":
             image_fn = os.path.join(folder, str(i) + '.jpg')
             cv.imwrite(image_fn, frame)
             frame_info['image_fn'] = image_fn
-            frames.append(frame)
+            frames.append(frame_info)
             frame_idx += 1
             i += 0
 

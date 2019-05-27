@@ -21,21 +21,6 @@ def get_image(img):
 
 
 if __name__ == "__main__":
-    checkpoint = 'BEST_checkpoint.tar'
-    print('loading model: {}...'.format(checkpoint))
-    checkpoint = torch.load(checkpoint)
-    model = checkpoint['model'].to(device)
-    model.eval()
-
-    data_transforms = {
-        'val': transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        ]),
-    }
-
-    transformer = data_transforms['val']
-
     files = [f for f in os.listdir('video') if f.endswith('.mp4')]
     print('num_files: ' + str(len(files)))
 
@@ -75,6 +60,21 @@ if __name__ == "__main__":
     num_frames = len(frames)
     print('num_frames: ' + str(num_frames))
     assert (i == num_frames)
+
+    data_transforms = {
+        'val': transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ]),
+    }
+
+    transformer = data_transforms['val']
+
+    checkpoint = 'BEST_checkpoint.tar'
+    print('loading model: {}...'.format(checkpoint))
+    checkpoint = torch.load(checkpoint)
+    model = checkpoint['model'].to(device)
+    model.eval()
 
     print('generating features...')
     with torch.no_grad():

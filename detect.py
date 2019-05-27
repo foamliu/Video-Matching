@@ -27,7 +27,7 @@ if __name__ == "__main__":
     mat = np.load('video.npy')
     feature = np.load('image.npy')
     print(mat.shape)
-    print(feature)
+    # print(feature)
     print(feature.shape)
     frame_count = mat.shape[0]
     cosine = np.dot(mat, feature)

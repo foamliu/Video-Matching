@@ -3,7 +3,7 @@ import pickle
 
 import numpy as np
 import torch
-
+import cv2 as cv
 from config import device, pickle_file, im_size
 from utils import get_image, get_prob
 
@@ -38,7 +38,9 @@ if __name__ == "__main__":
     model.eval()
 
     test_fn = 'images/test_img_1.jpg'
-    img = get_image(test_fn)
+    img = cv.imread(test_fn)
+    img = cv.resize(img, (im_size, im_size))
+    img = get_image(img)
     imgs = torch.zeros([1, 3, im_size, im_size], dtype=torch.float)
     imgs[0] = img
     with torch.no_grad():

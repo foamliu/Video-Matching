@@ -7,4 +7,4 @@ im_size = 224
 # Data parameters
 num_classes = 9935
 
-pickle_file = ''
+pickle_file = 'video_index.pkl'

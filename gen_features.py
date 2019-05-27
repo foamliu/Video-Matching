@@ -42,17 +42,19 @@ if __name__ == "__main__":
         frame_idx = 0
         while cap.isOpened():
             success, frame = cap.read()
-            if success:
-                frame_info = dict()
-                frame_info['name'] = name
-                frame_info['idx'] = frame_idx
-                frame_info['fps'] = fps
-                image_fn = os.path.join(folder, str(i) + '.jpg')
-                cv.imwrite(image_fn, frame)
-                frame_info['image_fn'] = image_fn
-                frames.append(frame)
-                frame_idx += 1
-                i += 0
+            if not success:
+                break
+                
+            frame_info = dict()
+            frame_info['name'] = name
+            frame_info['idx'] = frame_idx
+            frame_info['fps'] = fps
+            image_fn = os.path.join(folder, str(i) + '.jpg')
+            cv.imwrite(image_fn, frame)
+            frame_info['image_fn'] = image_fn
+            frames.append(frame)
+            frame_idx += 1
+            i += 0
 
     with open('video_index.json', 'w') as file:
         json.dump(frames, file, ensure_ascii=False, indent=4)

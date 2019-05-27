@@ -1,3 +1,4 @@
+import json
 import os
 import pickle
 
@@ -35,20 +36,22 @@ if __name__ == "__main__":
 
     transformer = data_transforms['val']
 
-    folder = 'video'
-    files = [f for f in os.listdir(folder) if f.endswith('.mp4')]
+    files = [f for f in os.listdir('video') if f.endswith('.mp4')]
     frames = []
 
+    folder = 'cache'
+    if not os.path.isdir(folder):
+        os.makedirs(folder)
+
+    i = 0
     for file in tqdm(files):
         filename = os.path.join(folder, file)
         file = file[3:]
         tokens = file.split('-')
         name = tokens[0] + '-' + tokens[1]
-        # print(name)
 
         cap = cv.VideoCapture(filename)
         fps = cap.get(cv.CAP_PROP_FPS)
-
         frame_idx = 0
         while cap.isOpened():
             success, frame = cap.read()
@@ -57,21 +60,30 @@ if __name__ == "__main__":
                 frame_info['name'] = name
                 frame_info['idx'] = frame_idx
                 frame_info['fps'] = fps
+                image_fn = os.path.join(folder, str(i) + '.jpg')
+                cv.imwrite(image_fn, frame)
+                frame_info['image_fn'] = image_fn
+                frames.append(frame)
+                frame_idx += 1
 
-                frame = cv.resize(frame, (im_size, im_size))
-                img = get_image(frame)
-                imgs = torch.zeros([1, 3, im_size, im_size], dtype=torch.float)
-                imgs[0] = img
-                with torch.no_grad():
-                    output = model(imgs)
-                    feature = output[0].cpu().numpy()
-                    feature = feature / np.linalg.norm(feature)
-                    frame_info['feature'] = feature
-
-                    frame_idx += 1
-
-    with open('video_index.pkl', 'wb') as file:
-        pickle.dump(frames, file)
+    with open('video_index.json', 'w') as file:
+        json.dump(frames, file, ensure_ascii=False, indent=4)
 
     num_frames = len(frames)
     print('num_frames: ' + str(num_frames))
+
+    with torch.no_grad():
+        for frame in tqdm(frames):
+            image_fn = frame['image_fn']
+            img = cv.imread(image_fn)
+            img = cv.resize(img, (im_size, im_size))
+            img = get_image(img)
+            imgs = torch.zeros([1, 3, im_size, im_size], dtype=torch.float)
+            imgs[0] = img
+            output = model(imgs)
+            feature = output[0].cpu().numpy()
+            feature = feature / np.linalg.norm(feature)
+            frame['feature'] = feature
+
+    with open('video_index.pkl', 'wb') as file:
+        pickle.dump(frames, file)

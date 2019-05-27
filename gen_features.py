@@ -43,6 +43,7 @@ if __name__ == "__main__":
     if not os.path.isdir(folder):
         os.makedirs(folder)
 
+    print('building index...')
     i = 0
     for file in tqdm(files):
         filename = os.path.join(folder, file)
@@ -72,6 +73,7 @@ if __name__ == "__main__":
     num_frames = len(frames)
     print('num_frames: ' + str(num_frames))
 
+    print('generating features...')
     with torch.no_grad():
         for frame in tqdm(frames):
             image_fn = frame['image_fn']

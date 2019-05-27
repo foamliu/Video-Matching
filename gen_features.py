@@ -37,7 +37,7 @@ if __name__ == "__main__":
     transformer = data_transforms['val']
 
     files = [f for f in os.listdir('video') if f.endswith('.mp4')]
-    frames = []
+    print('num_files: ' + str(len(files)))
 
     folder = 'cache'
     if not os.path.isdir(folder):
@@ -45,8 +45,9 @@ if __name__ == "__main__":
 
     print('building index...')
     i = 0
+    frames = []
     for file in tqdm(files):
-        filename = os.path.join(folder, file)
+        filename = os.path.join('video', file)
         file = file[3:]
         tokens = file.split('-')
         name = tokens[0] + '-' + tokens[1]
@@ -66,12 +67,14 @@ if __name__ == "__main__":
                 frame_info['image_fn'] = image_fn
                 frames.append(frame)
                 frame_idx += 1
+                i += 0
 
     with open('video_index.json', 'w') as file:
         json.dump(frames, file, ensure_ascii=False, indent=4)
 
     num_frames = len(frames)
     print('num_frames: ' + str(num_frames))
+    assert (i == num_frames)
 
     print('generating features...')
     with torch.no_grad():

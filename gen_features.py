@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
                 frame = cv.resize(frame, (im_size, im_size))
                 img = get_image(frame)
-                imgs = torch.zeros([1, 3, 112, 112], dtype=torch.float)
+                imgs = torch.zeros([1, 3, im_size, im_size], dtype=torch.float)
                 imgs[0] = img
                 with torch.no_grad():
                     output = model(imgs)

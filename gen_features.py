@@ -5,13 +5,10 @@ import pickle
 import cv2 as cv
 import numpy as np
 import torch
-from PIL import Image
-from torchvision import transforms
 from tqdm import tqdm
 
 from config import device
 from config import im_size
-
 from utils import get_image
 
 if __name__ == "__main__":

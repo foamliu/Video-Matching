@@ -57,7 +57,7 @@ if __name__ == "__main__":
     checkpoint = 'BEST_checkpoint.tar'
     print('loading model: {}...'.format(checkpoint))
     checkpoint = torch.load(checkpoint)
-    model = checkpoint['model'].to(device)
+    model = checkpoint['model'].module.to(device)
     model.eval()
 
     print('generating features...')
@@ -69,6 +69,7 @@ if __name__ == "__main__":
             img = get_image(img)
             imgs = torch.zeros([1, 3, im_size, im_size], dtype=torch.float)
             imgs[0] = img
+            imgs = imgs.to(device)
             output = model(imgs)
             feature = output[0].cpu().numpy()
             feature = feature / np.linalg.norm(feature)
